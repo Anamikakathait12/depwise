@@ -69,14 +69,18 @@ describe('dependency graph storage and PostgreSQL traversal', () => {
     const simple = await persistFixture(readFixture('simple-tree.json'));
     const leafId = await packageId(simple.scanId, 'leaf');
     expect((await getPathsToPackage(simple.scanId, leafId)).paths).toEqual([
-      { lockPaths: ['node_modules/app', 'node_modules/leaf'], devOnly: false },
+      {
+        lockPaths: ['node_modules/app', 'node_modules/leaf'],
+        devOnly: false,
+        lockfileIsDev: false,
+      },
     ]);
 
     const diamond = await persistFixture(readFixture('diamond.json'));
     const sharedId = await packageId(diamond.scanId, 'shared');
     const diamondPaths = await getPathsToPackage(diamond.scanId, sharedId);
     expect(diamondPaths.paths).toHaveLength(2);
-    expect(diamondPaths.paths.map((path) => path.lockPaths[0]).sort()).toEqual([
+    expect(diamondPaths.paths.map((path) => path.lockPaths[0])).toEqual([
       'node_modules/left',
       'node_modules/right',
     ]);
@@ -89,7 +93,11 @@ describe('dependency graph storage and PostgreSQL traversal', () => {
     const devOnly = await persistFixture(readFixture('dev-only-chain.json'));
     const utilId = await packageId(devOnly.scanId, 'util');
     expect((await getPathsToPackage(devOnly.scanId, utilId)).paths).toEqual([
-      { lockPaths: ['node_modules/cli', 'node_modules/util'], devOnly: true },
+      {
+        lockPaths: ['node_modules/cli', 'node_modules/util'],
+        devOnly: true,
+        lockfileIsDev: true,
+      },
     ]);
     expect(await isReachableViaProd(devOnly.scanId, utilId)).toBe(false);
 
@@ -118,7 +126,11 @@ describe('dependency graph storage and PostgreSQL traversal', () => {
     const workspace = await persistFixture(readFixture('workspace-link.json'));
     const workspaceId = await packageId(workspace.scanId, 'workspace-lib', '1.2.0');
     expect((await getPathsToPackage(workspace.scanId, workspaceId)).paths).toEqual([
-      { lockPaths: ['node_modules/workspace-lib'], devOnly: true },
+      {
+        lockPaths: ['node_modules/workspace-lib'],
+        devOnly: true,
+        lockfileIsDev: true,
+      },
     ]);
   });
 
@@ -155,9 +167,28 @@ describe('dependency graph storage and PostgreSQL traversal', () => {
   it('returns a truncated result at the depth cap and at 100 paths', async () => {
     const simple = await persistFixture(readFixture('simple-tree.json'));
     const leafId = await packageId(simple.scanId, 'leaf');
+    const appId = await packageId(simple.scanId, 'app');
     const depthResult = await getPathsToPackage(simple.scanId, leafId, 1);
     expect(depthResult.paths).toEqual([]);
     expect(depthResult.truncated).toBe(true);
+    const rootAtCap = await getPathsToPackage(simple.scanId, appId, 1);
+    expect(rootAtCap.paths).toHaveLength(1);
+    expect(rootAtCap.truncated).toBe(false);
+
+    const pathOrder = await persistFixture(JSON.stringify({
+      lockfileVersion: 3,
+      packages: {
+        '': { dependencies: { direct: '1.0.0', parent: '1.0.0' } },
+        'node_modules/direct': { version: '1.0.0' },
+        'node_modules/parent': { version: '1.0.0', dependencies: { direct: '1.0.0' } },
+      },
+    }));
+    const directId = await packageId(pathOrder.scanId, 'direct');
+    const orderedPaths = await getPathsToPackage(pathOrder.scanId, directId);
+    expect(orderedPaths.paths.map((path) => path.lockPaths)).toEqual([
+      ['node_modules/direct'],
+      ['node_modules/parent', 'node_modules/direct'],
+    ]);
 
     const packages: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
     const dependencies: Record<string, string> = Object.create(null) as Record<string, string>;
@@ -181,11 +212,33 @@ describe('dependency graph storage and PostgreSQL traversal', () => {
   it('matches lockfile dev flags on the public fixture', async () => {
     const parsed = parseLockfile(readFixture('public-deconf.json'));
     const scan = await persistFixture(readFixture('public-deconf.json'));
+    const mismatches: {
+      readonly lockPath: string;
+      readonly lockfileIsDev: boolean;
+      readonly pathDevOnly: boolean | undefined;
+    }[] = [];
     for (const instance of parsed.instances) {
       const id = await packageId(scan.scanId, instance.name, instance.version);
       const paths = await getPathsToPackage(scan.scanId, id);
-      expect(paths.paths.length).toBeGreaterThan(0);
-      expect(paths.paths.every((path) => path.devOnly === instance.isDev)).toBe(true);
+      const instancePaths = paths.paths.filter((path) => path.lockPaths.at(-1) === instance.lockPath);
+      if (instancePaths.length === 0) {
+        mismatches.push({
+          lockPath: instance.lockPath,
+          lockfileIsDev: instance.isDev,
+          pathDevOnly: undefined,
+        });
+        continue;
+      }
+      for (const path of instancePaths) {
+        if (path.devOnly !== instance.isDev || path.lockfileIsDev !== instance.isDev) {
+          mismatches.push({
+            lockPath: instance.lockPath,
+            lockfileIsDev: instance.isDev,
+            pathDevOnly: path.devOnly,
+          });
+        }
+      }
     }
+    expect(mismatches, JSON.stringify(mismatches, null, 2)).toEqual([]);
   });
 });

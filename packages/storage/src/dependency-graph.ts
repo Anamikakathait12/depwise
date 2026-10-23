@@ -19,6 +19,7 @@ interface InstanceIdRow {
 interface PackagePathRow {
   readonly lock_paths: string[];
   readonly dev_only: boolean;
+  readonly lockfile_is_dev: boolean;
 }
 
 interface BooleanRow {
@@ -32,6 +33,7 @@ interface TruncationRow {
 export interface PackagePath {
   readonly lockPaths: readonly string[];
   readonly devOnly: boolean;
+  readonly lockfileIsDev: boolean;
 }
 
 export interface PackagePathsResult {
@@ -155,7 +157,8 @@ const PATHS_TO_PACKAGE_SQL = `
       instance.id AS current_instance_id,
       ARRAY[instance.id]::uuid[] AS instance_path,
       ARRAY[instance.lock_path]::text[] AS lock_paths,
-      instance.is_dev AS dev_only,
+      false AS dev_only,
+      instance.is_dev AS lockfile_is_dev,
       0::integer AS depth,
       false AS is_root
     FROM scan_package_instances instance
@@ -175,7 +178,8 @@ const PATHS_TO_PACKAGE_SQL = `
         ELSE ARRAY[parent.lock_path]::text[] || ancestors.lock_paths
       END AS lock_paths,
       ancestors.dev_only OR edge.dep_type = 'dev'::dependency_type
-        OR coalesce(parent.is_dev, false) AS dev_only,
+        AS dev_only,
+      ancestors.lockfile_is_dev AS lockfile_is_dev,
       ancestors.depth + 1 AS depth,
       edge.parent_instance_id IS NULL AS is_root
     FROM ancestors
@@ -187,7 +191,7 @@ const PATHS_TO_PACKAGE_SQL = `
     WHERE ancestors.depth < $3
       AND (parent.id IS NULL OR NOT (parent.id = ANY(ancestors.instance_path)))
   )
-  SELECT lock_paths, dev_only
+  SELECT lock_paths, dev_only, lockfile_is_dev
   FROM ancestors
   WHERE is_root
   LIMIT $4
@@ -260,7 +264,15 @@ export async function getPathsToPackage(
     const paths = result.rows.slice(0, MAX_RETURNED_PATHS).map((row) => ({
       lockPaths: row.lock_paths,
       devOnly: row.dev_only,
+      lockfileIsDev: row.lockfile_is_dev,
     }));
+    paths.sort((left, right) => {
+      const depthDifference = left.lockPaths.length - right.lockPaths.length;
+      if (depthDifference !== 0) return depthDifference;
+      const leftPath = left.lockPaths.join('/');
+      const rightPath = right.lockPaths.join('/');
+      return leftPath < rightPath ? -1 : leftPath > rightPath ? 1 : 0;
+    });
     const depthResult = wasPathLimited
       ? undefined
       : await client.query<TruncationRow>(DEPTH_TRUNCATION_SQL, [scanId, packageId, depthCap]);
