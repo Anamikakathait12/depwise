@@ -1,0 +1,11 @@
+{
+  "lockfileVersion": 3,
+  "packages": {
+    "": {
+      "dependencies": { "required-missing": "1.0.0" },
+      "optionalDependencies": { "optional-missing": "1.0.0" },
+      "peerDependencies": { "peer-missing": "1.0.0" },
+      "peerDependenciesMeta": { "peer-missing": { "optional": true } }
+    }
+  }
+}

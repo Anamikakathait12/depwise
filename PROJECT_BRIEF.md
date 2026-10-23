@@ -68,8 +68,8 @@ The initial structure includes `apps/api`, `packages/core`, and `packages/storag
 | Phase | Work | Status |
 | --- | --- | --- |
 | 0 | Brief | In progress |
-| 1 | Scaffold + DB | Planned |
-| 2 | Lockfile + graph | Planned |
+| 1 | Scaffold + DB | In progress |
+| 2 | Lockfile + graph | In progress |
 | 3 | OSV ingestion | Planned |
 | 4 | Dev/prod classification | Planned |
 | 5 | AST scanner | Planned |
@@ -101,14 +101,51 @@ For every task, plan first and wait for approval, implement in small diffs, writ
 depwise/
 ├── apps/
 │   └── api/
+│       ├── src/
+│       │   ├── index.ts
+│       │   ├── server.test.ts
+│       │   └── server.ts
+│       ├── package.json
+│       └── tsconfig.json
 ├── fixtures/
 │   ├── labeled-alerts/
 │   └── lockfiles/
+│       └── phase-2/
+│           ├── cycle.json
+│           ├── dev-only-chain.json
+│           ├── diamond.json
+│           ├── missing-optional.json
+│           ├── nested-copies.json
+│           ├── prod-dev-mix.json
+│           ├── proto-key.json
+│           ├── public-deconf.json
+│           ├── README.md
+│           ├── simple-tree.json
+│           └── workspace-link.json
 ├── packages/
 │   ├── core/
-│   │   └── src/
-│   │       └── lockfile/
+│   │   ├── src/
+│   │   │   ├── index.ts
+│   │   │   └── lockfile/
+│   │   │       ├── errors.ts
+│   │   │       ├── index.ts
+│   │   │       ├── parse.test.ts
+│   │   │       ├── parse.ts
+│   │   │       ├── schema.ts
+│   │   │       └── types.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
 │   └── storage/
+│       ├── migrations/
+│       │   ├── 001_initial_schema.sql
+│       │   └── 002_scan_package_instances.sql
+│       ├── src/
+│       │   ├── db.ts
+│       │   ├── dependency-graph.integration.test.ts
+│       │   ├── dependency-graph.ts
+│       │   └── migrate.test.ts
+│       ├── package.json
+│       └── tsconfig.json
 ├── .editorconfig
 ├── .env.example
 ├── .gitignore
@@ -117,6 +154,11 @@ depwise/
 ├── CLAUDE.md
 ├── docker-compose.yml
 ├── eslint.config.js
+├── node-pg-migrate.config.cjs
+├── package-lock.json
+├── package.json
 ├── PROJECT_BRIEF.md
-└── tsconfig.base.json
+├── tsconfig.base.json
+├── tsconfig.json
+└── vitest.config.ts
 ```

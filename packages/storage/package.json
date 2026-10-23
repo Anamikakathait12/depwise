@@ -1,0 +1,16 @@
+{
+  "name": "@npm-alert-triage/storage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./db": "./dist/db.js",
+    "./dependency-graph": "./dist/dependency-graph.js"
+  },
+  "scripts": { "build": "tsc -b" },
+  "dependencies": {
+    "@npm-alert-triage/core": "0.1.0",
+    "pg": "8.13.1"
+  },
+  "devDependencies": { "@types/pg": "8.11.10" }
+}

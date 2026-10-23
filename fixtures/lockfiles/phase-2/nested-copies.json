@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 3,
+  "packages": {
+    "": { "dependencies": { "host": "1.0.0", "duplicate": "2.0.0" } },
+    "node_modules/host": { "version": "1.0.0", "dependencies": { "duplicate": "1.0.0" } },
+    "node_modules/host/node_modules/duplicate": { "version": "1.0.0" },
+    "node_modules/duplicate": { "version": "2.0.0" }
+  }
+}

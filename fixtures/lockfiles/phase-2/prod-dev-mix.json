@@ -1,0 +1,12 @@
+{
+  "lockfileVersion": 3,
+  "packages": {
+    "": {
+      "dependencies": { "prod-parent": "1.0.0" },
+      "devDependencies": { "dev-parent": "1.0.0" }
+    },
+    "node_modules/prod-parent": { "version": "1.0.0", "dependencies": { "shared": "1.0.0" } },
+    "node_modules/dev-parent": { "version": "1.0.0", "dev": true, "dependencies": { "shared": "1.0.0" } },
+    "node_modules/shared": { "version": "1.0.0" }
+  }
+}

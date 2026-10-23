@@ -1,0 +1,9 @@
+{
+  "name": "simple-tree",
+  "lockfileVersion": 3,
+  "packages": {
+    "": { "dependencies": { "app": "1.0.0" } },
+    "node_modules/app": { "version": "1.0.0", "dependencies": { "leaf": "1.0.0" } },
+    "node_modules/leaf": { "version": "1.0.0" }
+  }
+}

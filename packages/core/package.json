@@ -1,0 +1,12 @@
+{
+  "name": "@npm-alert-triage/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./lockfile": "./dist/lockfile/index.js"
+  },
+  "dependencies": { "zod": "3.24.1" },
+  "scripts": { "build": "tsc -b" }
+}

@@ -10,6 +10,11 @@
     "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist"
   }
 }

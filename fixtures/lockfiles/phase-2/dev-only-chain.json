@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 3,
+  "packages": {
+    "": { "devDependencies": { "cli": "1.0.0" } },
+    "node_modules/cli": { "version": "1.0.0", "dev": true, "dependencies": { "util": "1.0.0" } },
+    "node_modules/util": { "version": "1.0.0", "dev": true }
+  }
+}

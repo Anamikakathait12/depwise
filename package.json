@@ -1,0 +1,31 @@
+{
+  "name": "npm-alert-triage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "engines": { "node": ">=20 <21" },
+  "scripts": {
+    "db:up": "docker compose up -d postgres",
+    "db:migrate": "node-pg-migrate --config-file node-pg-migrate.config.cjs --migrations-dir packages/storage/migrations --migrations-table schema_migrations --envPath .env up",
+    "db:migrate:down": "node-pg-migrate --config-file node-pg-migrate.config.cjs --migrations-dir packages/storage/migrations --migrations-table schema_migrations --envPath .env down",
+    "test": "npm run typecheck && npm run db:migrate && vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --build"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.17.0",
+    "@types/node": "22.10.5",
+    "eslint": "9.17.0",
+    "eslint-config-prettier": "9.1.0",
+    "globals": "15.14.0",
+    "node-pg-migrate": "7.9.0",
+    "prettier": "3.4.2",
+    "typescript": "5.7.2",
+    "typescript-eslint": "8.18.0",
+    "vitest": "2.1.8"
+  },
+  "dependencies": {
+    "dotenv": "16.4.7"
+  }
+}

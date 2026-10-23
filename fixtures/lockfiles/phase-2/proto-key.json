@@ -1,0 +1,7 @@
+{
+  "lockfileVersion": 3,
+  "packages": {
+    "": {},
+    "__proto__": { "name": "safe-proto-package", "version": "1.0.0" }
+  }
+}
