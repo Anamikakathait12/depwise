@@ -1,8 +1,8 @@
-# npm Alert Triage
+# Depwise
 
 ## Purpose
 
-npm Alert Triage takes a `package-lock.json` and optional repository source code, then helps developers decide whether npm vulnerability alerts are exploitable in their usage. Each verdict includes cited evidence.
+Depwise takes a `package-lock.json` and optional repository source code, then helps developers decide whether npm vulnerability alerts are exploitable in their usage. Each verdict includes cited evidence.
 
 ## Fixed stack
 
@@ -63,14 +63,36 @@ Each verdict includes `evidence[]`, `confidence` from 0 to 1, and `reasoning`.
 
 The initial structure includes `apps/api`, `packages/core`, and `packages/storage`. Advisory retrieval, source scanning, and judging packages will be added in later phases. The dashboard is also deferred. Root-level fixtures will hold lockfiles and labeled alerts for development and tests.
 
+## Schema notes
+
+- Migration 002 adds `scan_package_instances`; dependency edges reference instances. `parent_instance_id IS NULL` denotes a root edge.
+- Migrations 001 and 002 are applied and must never be edited. Put all future schema changes in new migrations.
+
+## Graph rules
+
+- `getPathsToPackage` recurses upward from target instances. It uses a cycle guard, a depth cap, a 100-path SQL limit, a `truncated` flag, and deterministic TypeScript sorting.
+- Path `dev_only` is derived from edge `dep_type` only. The lockfile flag is exposed separately as `lockfileIsDev` for the invariant test.
+- `isReachableViaProd` is implemented as a set-based recursive CTE using `UNION`.
+
+## Local development
+
+- Docker Compose binds PostgreSQL to `127.0.0.1:5433`; `.env.example` uses the matching port.
+- SQL migrations are in `packages/storage/migrations`.
+- `npm test` runs typecheck, migrations, and Vitest. The node-pg-migrate “Can't determine timestamp” warning is harmless for the current migration filenames.
+
+## Known follow-ups
+
+- Node 20 is required; the current development machine runs Node 24.
+- npm audit findings on development dependencies are deferred to Phase 10.
+
 ## Roadmap
 
 | Phase | Work | Status |
 | --- | --- | --- |
-| 0 | Brief | In progress |
-| 1 | Scaffold + DB | In progress |
-| 2 | Lockfile + graph | In progress |
-| 3 | OSV ingestion | Planned |
+| 0 | Brief | Done |
+| 1 | Scaffold + DB | Done |
+| 2 | Lockfile + graph | Done |
+| 3 | OSV ingestion | Next |
 | 4 | Dev/prod classification | Planned |
 | 5 | AST scanner | Planned |
 | 6 | Hybrid retrieval | Planned |
@@ -147,6 +169,7 @@ depwise/
 │       ├── package.json
 │       └── tsconfig.json
 ├── .editorconfig
+├── .gitattributes
 ├── .env.example
 ├── .gitignore
 ├── .nvmrc
