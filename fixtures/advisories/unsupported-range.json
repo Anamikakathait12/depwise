@@ -1,0 +1,9 @@
+{
+  "id": "TEST-UNSUPPORTED-RANGE",
+  "summary": "Unsupported range type",
+  "details": "A GIT range cannot be evaluated without repository history.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "GIT", "events": [{ "introduced": "abc" }] }]
+  }]
+}

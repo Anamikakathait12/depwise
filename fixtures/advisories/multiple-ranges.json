@@ -1,0 +1,12 @@
+{
+  "id": "TEST-MULTIPLE-RANGES",
+  "summary": "Multiple affected ranges",
+  "details": "Either range is independently affected.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [
+      { "type": "SEMVER", "events": [{ "introduced": "1.0.0" }, { "fixed": "1.1.0" }] },
+      { "type": "SEMVER", "events": [{ "introduced": "2.0.0" }, { "fixed": "2.1.0" }] }
+    ]
+  }]
+}

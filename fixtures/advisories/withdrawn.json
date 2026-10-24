@@ -1,0 +1,10 @@
+{
+  "id": "TEST-WITHDRAWN",
+  "summary": "Withdrawn advisory",
+  "details": "This record must not be matched.",
+  "withdrawn": "2026-01-02T03:04:05Z",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "versions": ["1.0.0"]
+  }]
+}

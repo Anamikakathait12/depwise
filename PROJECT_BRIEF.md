@@ -61,7 +61,7 @@ Each verdict includes `evidence[]`, `confidence` from 0 to 1, and `reasoning`.
 
 ## Initial repository scope
 
-The initial structure includes `apps/api`, `packages/core`, and `packages/storage`. Advisory retrieval, source scanning, and judging packages will be added in later phases. The dashboard is also deferred. Root-level fixtures will hold lockfiles and labeled alerts for development and tests.
+The initial structure includes `apps/api`, `packages/core`, `packages/storage`, and `packages/advisory`. Source scanning and judging packages will be added in later phases. The dashboard is also deferred. Root-level fixtures hold lockfiles, OSV-format advisories, and labeled alerts for development and tests.
 
 ## Schema notes
 
@@ -78,6 +78,7 @@ The initial structure includes `apps/api`, `packages/core`, and `packages/storag
 
 - Docker Compose binds PostgreSQL to `127.0.0.1:5433`; `.env.example` uses the matching port.
 - SQL migrations are in `packages/storage/migrations`.
+- Phase 3 ingests local OSV-format JSON only; it has no live network client. Package names are lowercase-normalized for exact matching. npm `ECOSYSTEM` range ordering is evaluated with `semver`; unknown or unsupported range details produce `uncertain` alerts.
 - `npm test` runs typecheck, migrations, and Vitest. The node-pg-migrate “Can't determine timestamp” warning is harmless for the current migration filenames.
 
 ## Known follow-ups
@@ -92,7 +93,7 @@ The initial structure includes `apps/api`, `packages/core`, and `packages/storag
 | 0 | Brief | Done |
 | 1 | Scaffold + DB | Done |
 | 2 | Lockfile + graph | Done |
-| 3 | OSV ingestion | Next |
+| 3 | OSV ingestion + lockfile matching | In progress |
 | 4 | Dev/prod classification | Planned |
 | 5 | AST scanner | Planned |
 | 6 | Hybrid retrieval | Planned |

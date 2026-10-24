@@ -1,0 +1,9 @@
+{
+  "id": "TEST-UNKNOWN-EVENT",
+  "summary": "Unknown event requires review",
+  "details": "Unknown event names are retained as uncertain.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "SEMVER", "events": [{ "introduced": "0" }, { "patched": "2.0.0" }] }]
+  }]
+}

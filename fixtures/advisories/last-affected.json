@@ -1,0 +1,9 @@
+{
+  "id": "TEST-LAST-AFFECTED",
+  "summary": "Last affected boundary",
+  "details": "The last affected version is inclusive.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "SEMVER", "events": [{ "introduced": "0" }, { "last_affected": "1.2.3" }] }]
+  }]
+}

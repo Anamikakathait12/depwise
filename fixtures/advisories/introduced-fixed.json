@@ -1,0 +1,12 @@
+{
+  "id": "TEST-INTRODUCED-FIXED",
+  "aliases": ["CVE-2099-0001"],
+  "summary": "Introduced at start and fixed at 1.2.3",
+  "details": "A synthetic npm advisory for boundary matching.",
+  "severity": [{ "type": "CVSS_V3", "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H" }],
+  "database_specific": { "severity": "HIGH" },
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "SEMVER", "events": [{ "introduced": "0" }, { "fixed": "1.2.3" }] }]
+  }]
+}

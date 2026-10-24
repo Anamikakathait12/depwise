@@ -1,0 +1,6 @@
+{
+  "id": "TEST-EMPTY-AFFECTED-ENTRY",
+  "summary": "Affected entry without ranges or versions",
+  "details": "This affected package entry cannot be evaluated.",
+  "affected": [{ "package": { "ecosystem": "npm", "name": "target-pkg" } }]
+}

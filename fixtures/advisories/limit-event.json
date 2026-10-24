@@ -1,0 +1,9 @@
+{
+  "id": "TEST-LIMIT-EVENT",
+  "summary": "Limit event requires review",
+  "details": "Do not infer SEMVER or ECOSYSTEM limit behavior.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "SEMVER", "events": [{ "introduced": "0" }, { "limit": "2.0.0" }] }]
+  }]
+}

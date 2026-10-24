@@ -1,0 +1,9 @@
+{
+  "id": "TEST-VERSION-LIST",
+  "summary": "Explicitly listed affected versions",
+  "details": "A version list can match without ranges.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "versions": ["1.0.0", "1.2.3-beta.1"]
+  }]
+}

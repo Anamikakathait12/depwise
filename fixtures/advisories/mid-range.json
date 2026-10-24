@@ -1,0 +1,9 @@
+{
+  "id": "TEST-MID-RANGE",
+  "summary": "Mid-range advisory",
+  "details": "Affected between inclusive introduced and exclusive fixed versions.",
+  "affected": [{
+    "package": { "ecosystem": "npm", "name": "target-pkg" },
+    "ranges": [{ "type": "ECOSYSTEM", "events": [{ "introduced": "1.2.0" }, { "fixed": "1.4.0" }] }]
+  }]
+}

@@ -3,6 +3,7 @@
   "references": [
     { "path": "./packages/core" },
     { "path": "./packages/storage" },
+    { "path": "./packages/advisory" },
     { "path": "./apps/api" }
   ]
 }

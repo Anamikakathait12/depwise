@@ -1,0 +1,9 @@
+{
+  "id": "TEST-NON-NPM",
+  "summary": "Non-npm ecosystem",
+  "details": "This record must be skipped for this npm-only project.",
+  "affected": [{
+    "package": { "ecosystem": "PyPI", "name": "target-pkg" },
+    "versions": ["1.0.0"]
+  }]
+}
