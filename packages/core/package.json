@@ -7,6 +7,6 @@
     ".": "./dist/index.js",
     "./lockfile": "./dist/lockfile/index.js"
   },
-  "dependencies": { "zod": "3.24.1" },
+  "dependencies": { "zod": "4.6.7" },
   "scripts": { "build": "tsc -b" }
 }

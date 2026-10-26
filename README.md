@@ -73,4 +73,4 @@ fixtures/             Lockfile, advisory, and labeled-alert fixtures
 ## Known limitations
 
 - npm only; intended code analysis is limited to direct imports and call-site matching, with no deep dataflow analysis. The scanner is not built yet.
-- Development dependencies have unfixed npm audit findings tracked for Phase 10.
+- Runtime dependencies are clean (`npm audit --omit=dev` reports 0 findings); 10 dev-only audit findings are documented in `docs/audit-triage.md` and tracked for Phase 10.
