@@ -80,6 +80,7 @@ The initial structure includes `apps/api`, `packages/core`, `packages/storage`, 
 - SQL migrations are in `packages/storage/migrations`.
 - Phase 3 ingests local OSV-format JSON only; it has no live network client. Package names are lowercase-normalized for exact matching. npm `ECOSYSTEM` range ordering is evaluated with `semver`; unknown or unsupported range details produce `uncertain` alerts.
 - `npm test` runs typecheck, migrations, and Vitest. The node-pg-migrate “Can't determine timestamp” warning is harmless for the current migration filenames.
+- Latest `npm test` result: 39 tests passed across 7 files.
 
 ## Known follow-ups
 
@@ -93,7 +94,7 @@ The initial structure includes `apps/api`, `packages/core`, `packages/storage`, 
 | 0 | Brief | Done |
 | 1 | Scaffold + DB | Done |
 | 2 | Lockfile + graph | Done |
-| 3 | OSV ingestion + lockfile matching | In progress |
+| 3 | OSV ingestion + lockfile matching | Done |
 | 4 | Dev/prod classification | Planned |
 | 5 | AST scanner | Planned |
 | 6 | Hybrid retrieval | Planned |
